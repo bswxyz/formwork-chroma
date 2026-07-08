@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CHROMA — Guide · How this was built</title>
+<meta name="description" content="How the CHROMA site was built with Fable: a raymarched liquid-chrome metaball rendered live in a WebGL fragment shader." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+<style>
+  :root{--bg:#050507;--ink:#eef0f5;--dim:#9a9caa;--faint:#5f6070;--accent:#b6a8ff;--cyan:#86e6ff;--line:rgba(238,240,245,.14)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Space Grotesk",system-ui,sans-serif;font-weight:300;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
+  .wrap{max-width:760px;margin:0 auto;padding:clamp(28px,6vw,80px) clamp(20px,5vw,32px)}
+  .top{display:flex;justify-content:space-between;align-items:center;font-family:"JetBrains Mono",monospace;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-bottom:clamp(40px,8vh,90px)}
+  .top a{color:var(--dim)}
+  .brand{font-family:"Syne",sans-serif;font-weight:800;letter-spacing:.02em;color:var(--ink)}
+  .tag{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.4rem}
+  h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(2.6rem,8vw,4.8rem);line-height:.98;letter-spacing:-.02em;margin-bottom:1.2rem}
+  h1 em{font-style:normal;background:linear-gradient(120deg,var(--accent),var(--cyan));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .lede{font-size:clamp(1.1rem,2.2vw,1.35rem);color:var(--dim);max-width:56ch;margin-bottom:3.4rem}
+  h2{font-family:"Syne",sans-serif;font-weight:700;font-size:clamp(1.7rem,4vw,2.5rem);margin:3rem 0 1rem;letter-spacing:-.01em}
+  p{color:var(--dim);margin:0 0 1.1rem;max-width:64ch}
+  strong{color:var(--ink);font-weight:500}
+  ul{color:var(--dim);margin:0 0 1.2rem 1.2rem}li{margin:.4rem 0}
+  code{font-family:"JetBrains Mono",monospace;font-size:.86em;background:rgba(255,255,255,.06);padding:.12em .4em;border-radius:3px;color:var(--ink)}
+  pre{background:#0b0b12;border:1px solid var(--line);border-radius:6px;padding:18px 20px;overflow-x:auto;margin:0 0 1.4rem;font-size:.82rem;line-height:1.6;font-family:"JetBrains Mono",monospace}
+  pre code{background:none;padding:0;color:var(--dim)}
+  .stack{list-style:none;margin:0 0 1.2rem;padding:0}
+  .stack li{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .stack b{color:var(--ink);font-weight:500;min-width:120px}
+  .rule{height:1px;background:var(--line);margin:3rem 0}
+  footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--line);font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a class="brand" href="../">CHROMA</a><a href="../">← Back to site</a></div>
+  <span class="tag">Build guide · Site 05 of 25</span>
+  <h1>Liquid metal, <em>raymarched live</em>.</h1>
+  <p class="lede">CHROMA is one of 25 sites built by Fable. The chrome blob isn't a video or a
+    model — it's a distance field, solved for every pixel, sixty times a second.</p>
+
+  <h2>The idea</h2>
+  <p>A studio that "melts brands down" should have a homepage made of molten metal. So the hero is a
+    cluster of invisible spheres, fused with a smooth blend and shaded like liquid chrome — it drifts on
+    its own and leans toward your cursor.</p>
+
+  <h2>The stack</h2>
+  <ul class="stack">
+    <li><b>Render</b> A hand-written GLSL fragment shader on raw WebGL — no 3D library.</li>
+    <li><b>Method</b> Raymarching a signed-distance field (SDF).</li>
+    <li><b>Motion</b> GSAP for scroll reveals; the shader animates itself on a clock uniform.</li>
+    <li><b>Type</b> Syne (display), Space Grotesk (text), JetBrains Mono (labels).</li>
+    <li><b>Host</b> Static files on GitHub Pages.</li>
+  </ul>
+
+  <h2>Signature technique: SDF raymarching</h2>
+  <p>Each metaball is a sphere expressed as a <strong>distance function</strong>. A <code>smin</code>
+    (smooth minimum) fuses them so they melt into one another instead of intersecting:</p>
+  <pre><code>float map(vec3 p){
+  float d = length(p - c1) - r1;
+  d = smin(d, length(p - c2) - r2, 0.6); // 0.6 = blend radius
+  d = smin(d, length(p - mouseBall) - r, 0.7);
+  return d;
+}</code></pre>
+  <p>A ray is marched from the camera per pixel — step forward by the current distance until it's
+    basically zero (a hit). The surface <strong>normal</strong> comes from the gradient of the field,
+    and chrome is faked by reflecting the view ray into a procedural iridescent environment plus a
+    Fresnel rim:</p>
+  <pre><code>vec3 n = normalize(gradient(map, p));
+vec3 reflected = reflect(rayDir, n);
+vec3 col = env(reflected) * (0.55 + 0.7*fresnel) + specular;</code></pre>
+
+  <h2>Details that matter</h2>
+  <ul>
+    <li><strong>No bloom pass</strong> — the glow is just a sharp specular highlight plus Fresnel.</li>
+    <li><strong>Performance</strong> — 90 march steps, devicePixelRatio capped at 1.4, one full-screen triangle.</li>
+    <li><strong>Legibility</strong> — a soft left-to-right scrim keeps the headline readable over the metal.</li>
+    <li><strong>Reduced motion / no WebGL</strong> — the shader freezes on a still frame, or a CSS gradient stands in.</li>
+  </ul>
+
+  <h2>Ship it on GitHub Pages</h2>
+  <pre><code>git init -b main &amp;&amp; git add -A &amp;&amp; git commit -m "ship"
+gh repo create fable-chroma --public --source=. --push
+gh api --method POST /repos/OWNER/fable-chroma/pages \
+  -f 'source[branch]=main' -f 'source[path]=/'</code></pre>
+
+  <div class="rule"></div>
+  <p>No textures, no meshes, no video — just a page of math that happens to look like poured metal.</p>
+  <footer>Designed &amp; built by <strong>Fable</strong> · Part of a 25-site showcase · <a href="../">Return to CHROMA →</a></footer>
+</div>
+</body>
+</html>

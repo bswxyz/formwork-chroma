@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script>document.documentElement.classList.add('js')</script>
+<title>CHROMA — a studio for liquid ideas</title>
+<meta name="description" content="CHROMA is a creative studio working in motion, brand and the moving image — rendered here as raymarched liquid chrome." />
+<meta name="theme-color" content="#050507" />
+<meta property="og:title" content="CHROMA — a studio for liquid ideas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Grotesk:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+<canvas id="chrome" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <a class="brand" href="./">CHROMA</a>
+  <nav class="nav-links">
+    <a href="#work">Work</a>
+    <a href="#studio">Studio</a>
+    <a href="./guide/">Guide</a>
+    <a class="nav-cta" href="#contact">Get in touch</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="eyebrow reveal">Creative studio · Motion · Brand · Film</p>
+    <h1 class="hero-title">
+      <span class="line"><span>CHROMA</span></span>
+    </h1>
+    <p class="hero-sub reveal">A studio for liquid ideas — we melt brands down and pour them back
+      as something that moves, reflects, and refuses to sit flat.</p>
+    <div class="hero-actions reveal">
+      <a class="btn" href="#work"><span>See the work</span></a>
+      <span class="meta">Est. 2026 · Available Q3</span>
+    </div>
+  </section>
+
+  <section class="strip" aria-hidden="true">
+    <div class="strip-track">
+      <span>MOTION</span><b>◇</b><span>IDENTITY</span><b>◇</b><span>FILM</span><b>◇</b><span>3D</span><b>◇</b>
+      <span>ART DIRECTION</span><b>◇</b><span>SOUND</span><b>◇</b>
+      <span>MOTION</span><b>◇</b><span>IDENTITY</span><b>◇</b><span>FILM</span><b>◇</b><span>3D</span><b>◇</b>
+      <span>ART DIRECTION</span><b>◇</b><span>SOUND</span><b>◇</b>
+    </div>
+  </section>
+
+  <section id="work" class="work">
+    <div class="section-head">
+      <p class="kicker">[ Selected work ]</p>
+      <h2 class="reveal">Things we<br>poured out</h2>
+    </div>
+    <ul class="work-list">
+      <li class="work-row reveal" tabindex="0"><span class="w-n">01</span><span class="w-name">Liquid Assets</span><span class="w-cat">Brand film · Sony</span><span class="w-yr">’26</span></li>
+      <li class="work-row reveal" tabindex="0"><span class="w-n">02</span><span class="w-name">Mercury</span><span class="w-cat">Identity · Fintech</span><span class="w-yr">’26</span></li>
+      <li class="work-row reveal" tabindex="0"><span class="w-n">03</span><span class="w-name">Molten</span><span class="w-cat">Title sequence · A24</span><span class="w-yr">’25</span></li>
+      <li class="work-row reveal" tabindex="0"><span class="w-n">04</span><span class="w-name">Reflect</span><span class="w-cat">Campaign · Nike</span><span class="w-yr">’25</span></li>
+    </ul>
+  </section>
+
+  <section id="studio" class="studio">
+    <div class="studio-inner">
+      <p class="kicker reveal">[ Studio ]</p>
+      <p class="studio-text reveal">We think the best brands behave like <em>metal in motion</em> —
+        solid enough to trust, fluid enough to surprise. We work in that gap, between the fixed and the flowing.</p>
+      <div class="studio-cols">
+        <div class="reveal"><h3>Disciplines</h3><p>Brand systems, motion design, film direction, 3D &amp; CGI, sound, art direction.</p></div>
+        <div class="reveal"><h3>Clients</h3><p>Independents and giants — fintech, fashion, film, music. We keep the list short on purpose.</p></div>
+        <div class="reveal"><h3>Approach</h3><p>Few projects, deep focus. We&nbsp;prototype in motion from day one, never in static frames.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="statement">
+    <p class="reveal"><span>Make it</span> <em>move.</em></p>
+  </section>
+</main>
+
+<footer id="contact" class="footer">
+  <p class="foot-k reveal">[ Let's melt something down ]</p>
+  <a class="foot-mail" href="#">studio@chroma.works</a>
+  <div class="foot-bottom">
+    <span>© 2026 CHROMA STUDIO</span>
+    <span>Designed &amp; built by Fable · <a href="./guide/">How this was built →</a></span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="./main.js"></script>
+</body>
+</html>
